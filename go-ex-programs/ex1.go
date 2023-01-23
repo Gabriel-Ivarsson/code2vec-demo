@@ -1,5 +1,9 @@
 package ex
 
-func exMain() {
+func goooo() {
 
+}
+
+func exMain() {
+  goooo()
 }
