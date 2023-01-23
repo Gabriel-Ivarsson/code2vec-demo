@@ -1,23 +1,49 @@
 import gensim
 import pandas as pd
 import sys
+import logging
 
-input = sys.argv[1]
-df = pd.read_json(input, lines=True)
-print(df)
-df.shape
+if __name__ == '__main__':
 
-review_text = df.context.apply(gensim.utils.simple_preprocess)
+    try:
+        input_file = sys.argv[1]
+    except Exception as e:
+        print("Supply file as argv param, or 'lazy' to use pre-downloaded data.")
+        sys.exit(1)
 
-model = gensim.models.Word2Vec(
-    window=10,
-    min_count=1,
-    workers=4,
-)
+    if input_file == "lazy":
+        df = pd.read_json("./data/reviews_Cell_Phones_and_Accessories.json", lines=True)
+        print(df)
+        df.shape
+        input_data = df.reviewText.apply(gensim.utils.simple_preprocess)
+        logging.info("Done reading data file!")
 
-model.build_vocab(review_text, progress_per=1000)
+        # build vocabulary and train model
+        model = gensim.models.Word2Vec(
+            input_data,
+            vector_size=150,
+            window=10,
+            min_count=2,
+            workers=10)
 
+        model.build_vocab(input_data, progress_per=1000)
+        model.train(input_data, total_examples=len(input_data), epochs=10)
+    else:
+        df = pd.read_json(input_file, lines=True)
+        print(df)
+        df.shape
+        input_data = df.context.apply(gensim.utils.simple_preprocess)
+        logging.info("Done reading data file!")
 
-model.train(review_text, total_examples=model.corpus_count, epochs=model.epochs)
+        # build vocabulary and train model
+        model = gensim.models.Word2Vec(
+            window=10,
+            min_count=1,
+            workers=4,
+            epochs=5,
+        )
 
-model.save("model.bin")
+        model.build_vocab(input_data, progress_per=1000)
+        model.train(input_data, total_examples=model.corpus_count, epochs=model.epochs)
+
+    model.save("model.bin")
