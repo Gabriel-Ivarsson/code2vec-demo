@@ -14,21 +14,21 @@ func generateJSON(node *ast.File) (error) {
   var typeSpecifier = make(map[string]string)
   var name []string
   var context = make(map[string]string)
-  var parentFile *ast.File
+  var parentPackage *ast.File
   var parentFunc *ast.FuncDecl
 
   ast.Inspect(node, func(n ast.Node) bool {
 
     switch x := n.(type) {
       case *ast.File:
-        typeSpecifier[x.Name.Name] = "FileDecl"
+        typeSpecifier[x.Name.Name] = "PackageDecl"
         name = append(name, x.Name.Name)
         context[x.Name.Name] += fmt.Sprintf("%s is the parent'file\n", x.Name.Name) 
-        parentFile = x     
+        parentPackage = x     
       case *ast.FuncDecl:
         typeSpecifier[x.Name.Name] = "FuncDecl"
         name = append(name, x.Name.Name)
-        context[x.Name.Name] +=  fmt.Sprintf("%s is a child of file %s\n", x.Name.Name, parentFile.Name.Name)
+        context[x.Name.Name] +=  fmt.Sprintf("%s is a child of file %s\n", x.Name.Name, parentPackage.Name.Name)
         parentFunc = x
       case *ast.CallExpr:
         methodName :=  fmt.Sprintf("%s", x.Fun)
