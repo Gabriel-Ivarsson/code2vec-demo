@@ -1,15 +1,17 @@
 import gensim
 import pandas as pd
+import sys
 
-df = pd.read_json("data/readyData/Cell_Phones_and_Accessories_5.json", lines=True)
+input = sys.argv[1]
+df = pd.read_json(input, lines=True)
 print(df)
 df.shape
 
-review_text = df.reviewText.apply(gensim.utils.simple_preprocess)
+review_text = df.context.apply(gensim.utils.simple_preprocess)
 
 model = gensim.models.Word2Vec(
     window=10,
-    min_count=2,
+    min_count=1,
     workers=4,
 )
 
