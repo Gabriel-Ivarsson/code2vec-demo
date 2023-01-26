@@ -1,5 +1,5 @@
 import gensim
-from colors import green, red
+from colors import cyan, green, red, blue
 import sys
 
 def check_word_list(input_list: list[str], input_model: str):
@@ -13,15 +13,15 @@ def check_word_list(input_list: list[str], input_model: str):
     elif input_model == "w2v":
         model = gensim.models.word2vec.Word2Vec.load("./word2vec-model/w2v-model.bin")
     else:
-        print("No valid model was given as second argv argument")
+        print(red("No valid model was given as second argv argument"))
         sys.exit(1)
 
     for word in input_list:
-        print("Results for words found similar to \"" + word + "\"")
-        print(green(model.wv.most_similar(input_list)))
+        print(blue("Results for words found similar to \"" + word + "\""))
+        print(green(model.wv.most_similar(word)))
 
     
-    print("Results for word that least fits in given word list")
+    print(blue("Results for word that least fits in given word list"))
     print(red(model.wv.doesnt_match(input_list)))
 
 
