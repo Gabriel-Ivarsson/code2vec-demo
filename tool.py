@@ -1,3 +1,4 @@
+import argparse
 import gensim
 from colors import cyan, green, red, blue
 import sys
@@ -17,7 +18,7 @@ def check_word_list(package_name: str, input_list: list[str], input_model: str):
         sys.exit(1)
 
     for word in input_list:
-        print(blue("Results for words found similar to \"" + word + "\""))
+        print(blue(f"Results for words found similar to \"{word}\""))
         print(green(model.wv.most_similar(word)))
 
     for word in input_list:
@@ -28,21 +29,18 @@ def check_word_list(package_name: str, input_list: list[str], input_model: str):
     print(red(model.wv.doesnt_match(input_list)))
 
 
-def main(argv: list[str]):
-    try:
-        input_model = argv[1]
-        package_name = argv[2]
-    except Exception as e:
-        print(red("Error: Supply model as first argv param, 'w2v' for Word2Vec or 'fast' FastText"))
-        print(red("And give package name as second argv param, 'w2v' for Word2Vec or 'fast' FastText"))
-        print(red("The rest are added to a list as words to compare against."))
-        raise e
-    input_list = argv[3:] # get all arguments, minus file name and model
+def main():
+    # command line arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument(dest = "function_list", nargs='+', default=[str], help="List of function names to compare to package name")
+    parser.add_argument("-p", "--package",dest = "package_name", help="The Package Name to compare function list too", required=True)
+    parser.add_argument("-m", "--model",dest = "input_model", help="The choosen input model; w2v or fast", required=True)
+    args = parser.parse_args()
 
     # check against model
-    check_word_list(package_name, input_list, input_model)
+    check_word_list(args.package_name, args.function_list, args.input_model)
 
 
 
 if __name__ == "__main__":
-    main(sys.argv)
+    main()
