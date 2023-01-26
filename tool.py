@@ -2,7 +2,7 @@ import gensim
 from colors import cyan, green, red, blue
 import sys
 
-def check_word_list(input_list: list[str], input_model: str):
+def check_word_list(package_name: str, input_list: list[str], input_model: str):
     if not input_list:
         # if list is empty
         print(red("Error: No words were provided as input"))
@@ -20,6 +20,9 @@ def check_word_list(input_list: list[str], input_model: str):
         print(blue("Results for words found similar to \"" + word + "\""))
         print(green(model.wv.most_similar(word)))
 
+    for word in input_list:
+        print(blue(f"Results for package name '{package_name}', compared to '{word}'"))
+        print(red(model.wv.distance(package_name, word)))
     
     print(blue("Results for word that least fits in given word list"))
     print(red(model.wv.doesnt_match(input_list)))
@@ -28,13 +31,16 @@ def check_word_list(input_list: list[str], input_model: str):
 def main(argv: list[str]):
     try:
         input_model = argv[1]
+        package_name = argv[2]
     except Exception as e:
-        print("Error: upply model as second argv param, 'w2v' for Word2Vec or 'fast' FastText")
+        print(red("Error: Supply model as first argv param, 'w2v' for Word2Vec or 'fast' FastText"))
+        print(red("And give package name as second argv param, 'w2v' for Word2Vec or 'fast' FastText"))
+        print(red("The rest are added to a list as words to compare against."))
         raise e
-    input_list = argv[2:] # get all arguments, minus file name and model
+    input_list = argv[3:] # get all arguments, minus file name and model
 
     # check against model
-    check_word_list(input_list, input_model)
+    check_word_list(package_name, input_list, input_model)
 
 
 
