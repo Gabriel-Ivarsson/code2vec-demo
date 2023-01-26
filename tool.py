@@ -19,7 +19,13 @@ def check_word_list(package_name: str, word_list: list[str], input_model: str, m
             print(red("No valid model was given as second argv argument"))
             sys.exit(1)
     else:
-        model = gensim.models.word2vec.Word2Vec.load(model_file)
+        if input_model == "fast":
+            model = gensim.models.fasttext.FastText.load(model_file)
+        elif input_model == "w2v":
+            model = gensim.models.word2vec.Word2Vec.load(model_file)
+        else:
+            print(red("No valid model was given as second argv argument"))
+            sys.exit(1)
 
 
     for word in word_list:
