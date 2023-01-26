@@ -18,7 +18,11 @@ if __name__ == '__main__':
         df = pd.read_json(input_file, lines=True)
         print(df)
         df.shape
-        input_data = df.context.apply(gensim.utils.simple_preprocess)
+        try:
+            input_data = df.context.apply(gensim.utils.simple_preprocess)
+        except:
+            print("`context` not found in JSON, trying `reviewText`")
+            input_data = df.reviewText.apply(gensim.utils.simple_preprocess)
         logging.info("Done reading data file!")
 
         # build vocabulary and train model
@@ -36,7 +40,11 @@ if __name__ == '__main__':
         df = pd.read_json(input_file, lines=True)
         print(df)
         df.shape
-        input_data = df.context.apply(gensim.utils.simple_preprocess)
+        try:
+            input_data = df.context.apply(gensim.utils.simple_preprocess)
+        except:
+            print("`context` not found in JSON, trying `reviewText`")
+            input_data = df.reviewText.apply(gensim.utils.simple_preprocess)
         logging.info("Done reading data file!")
 
         # build vocabulary and train model
