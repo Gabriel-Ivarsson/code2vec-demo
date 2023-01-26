@@ -1,3 +1,4 @@
+#!/usr/local/bin/python
 import argparse
 import gensim
 from colors import cyan, green, red, blue
