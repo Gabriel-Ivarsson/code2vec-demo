@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 import argparse
 import gensim
-from colors import cyan, green, red, blue
+from colors import green, red, blue
 import sys
 
 def check_word_list(package_name: str, word_list: list[str], input_model: str, model_file: str = "none"):
@@ -28,7 +28,7 @@ def check_word_list(package_name: str, word_list: list[str], input_model: str, m
 
     for word in word_list:
         print(blue(f"Results for package name '{package_name}', compared to '{word}'"))
-        print(red(model.wv.distance(package_name, word)))
+        print(green(model.wv.distance(package_name, word)))
     
     print(blue("Results for word that least fits in given word list"))
     print(red(model.wv.doesnt_match(word_list)))
