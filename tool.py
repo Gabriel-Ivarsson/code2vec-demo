@@ -12,17 +12,21 @@ def check_word_list(package_name: str, word_list: list[str], input_model: str, m
 
     if model_file == "none":
         if input_model == "fast":
-            model = gensim.models.fasttext.FastText.load("./word2vec-model/fast-model.bin")
+            model = gensim.models.fasttext.load_facebook_model("./word2vec-model/fast-model.bin")
+            model = model.wv
         elif input_model == "w2v":
             model = gensim.models.word2vec.Word2Vec.load("./word2vec-model/w2v-model.bin")
+            model = model.wv
         else:
             print(red("No valid model was given as second argv argument"))
             sys.exit(1)
     else:
         if input_model == "fast":
-            model = gensim.models.fasttext.FastText.load(model_file)
+            model = gensim.models.fasttext.load_facebook_model(model_file)
+            model = model.wv
         elif input_model == "w2v":
             model = gensim.models.word2vec.Word2Vec.load(model_file)
+            model = model.wv
         else:
             print(red("No valid model was given as second argv argument"))
             sys.exit(1)
@@ -30,14 +34,14 @@ def check_word_list(package_name: str, word_list: list[str], input_model: str, m
 
     for word in word_list:
         print(blue(f"Results for words found similar to \"{word}\""))
-        print(green(model.wv.most_similar(word)))
+        print(green(model.most_similar(word)))
 
     for word in word_list:
         print(blue(f"Results for package name '{package_name}', compared to '{word}'"))
-        print(green(model.wv.distance(package_name, word)))
+        print(green(model.distance(package_name, word)))
     
     print(blue("Results for word that least fits in given word list"))
-    print(red(model.wv.doesnt_match(word_list)))
+    print(red(model.doesnt_match(word_list)))
 
 
 def main():

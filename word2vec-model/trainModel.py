@@ -1,6 +1,4 @@
 import gensim
-from gensim.models.fasttext import FastText
-from gensim.test.utils import datapath
 import pandas as pd
 import sys
 import logging
@@ -26,16 +24,16 @@ if __name__ == '__main__':
         logging.info("Done reading data file!")
 
         # build vocabulary and train model
-        model = FastText(
+        model = gensim.models.fasttext.FastText(
             input_data,
-            vector_size=150,
+            vector_size=100,
             window=10,
             min_count=2,
             workers=10)
 
         model.build_vocab(input_data, progress_per=1000)
         model.train(input_data, total_examples=len(input_data), epochs=10)
-        model.save("fast-model.bin")
+        gensim.models.fasttext.save_facebook_model(model, "fast-fb-model.bin")
     elif input_model == "w2v":
         df = pd.read_json(input_file, lines=True)
         print(df)
