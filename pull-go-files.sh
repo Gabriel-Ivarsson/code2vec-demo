@@ -15,7 +15,7 @@ echo "Downloading" "$repo" "and extracting .go files, please wait..."
 curl -L -o "$tempfile" "$repo" # curl zip to tempfile
 mkdir -p "$datadir" # create data_dir directory if it doesnt exits.
 mkdir -p "$tempdir" # create temp_dir directory if it doesnt exits.
-unzip "$tempfile" -d "$datadir" "*.go" # unzip tempfile to data_dir
+unzip "$tempfile" -d "$datadir" "*.go" -x "*_test.go" # unzip tempfile to data_dir
 
 # clean up
 rm -f "$tempfile" # delete tempfile
