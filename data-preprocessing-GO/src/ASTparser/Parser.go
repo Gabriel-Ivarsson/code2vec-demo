@@ -1,3 +1,4 @@
+// Package astParser provides astParser
 package astParser
 
 import (
@@ -23,6 +24,8 @@ var (
 	packageType = "package"
 )
 
+// GetModel function
+// takes string `fast` or `w2v`
 func GetModel(modelName string) (int, error) {
 	if modelName == "fast" {
 		return fast, nil
