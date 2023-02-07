@@ -1,7 +1,7 @@
 #!/bin/bash
 
 datadir="training-data"
-tempdir="temp-dir"
+tempdir=".temp-dir"
 tempfile="tempfile.zip"
 # repo="https://github.com/Gabriel-Ivarsson/code2vec-demo/archive/refs/heads/main.zip"
 repo=$1

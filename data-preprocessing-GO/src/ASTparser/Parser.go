@@ -23,10 +23,10 @@ var (
 	packageType = "package"
 )
 
-func GetModel(argv string) (int, error) {
-	if argv == "fast" {
+func GetModel(modelName string) (int, error) {
+	if modelName == "fast" {
 		return fast, nil
-	} else if argv == "w2v" {
+	} else if modelName == "w2v" {
 		return word2vec, nil
 	}
 
