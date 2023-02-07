@@ -10,8 +10,8 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"regexp"
-	"strings"
+	// "regexp"
+	// "strings"
 )
 
 const (
@@ -44,8 +44,8 @@ func getTypeWord(model int, typeName string) string {
 }
 
 func sanitizeName(name string) string {
-	name = strings.ToLower(name)
-	name = regexp.MustCompile(`[^a-zA-Z0-9 ]+`).ReplaceAllString(name, "")
+	// name = strings.ToLower(name)
+	// name = regexp.MustCompile(`[^a-zA-Z0-9 ]+`).ReplaceAllString(name, "")
 	return name
 }
 
@@ -58,7 +58,7 @@ func generateContext(model int, node *ast.File) []string {
 		case *ast.File:
 			parentPackage = x
 		case *ast.FuncDecl:
-			context = append(context, fmt.Sprintf("%s%s %s%s", getTypeWord(model, "funcDecl"), getTypeWord(model, "package"), sanitizeName(x.Name.Name), sanitizeName(parentPackage.Name.Name)))
+			context = append(context, fmt.Sprintf("%s%s %s %s", getTypeWord(model, "funcDecl"), getTypeWord(model, "package"), sanitizeName(x.Name.Name), sanitizeName(parentPackage.Name.Name)))
 		}
 		return true
 	})
