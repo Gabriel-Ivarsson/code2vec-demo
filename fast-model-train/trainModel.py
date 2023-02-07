@@ -26,8 +26,8 @@ if __name__ == '__main__':
         # build vocabulary and train model
         model = gensim.models.fasttext.FastText(
             input_data,
-            vector_size=100,
-            window=10,
+            vector_size=20,
+            window=2,
             min_count=2,
             workers=10)
 
