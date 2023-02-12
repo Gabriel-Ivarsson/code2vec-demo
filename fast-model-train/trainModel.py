@@ -15,9 +15,10 @@ if __name__ == '__main__':
     print(df)
     df.shape
     try:
-        input_data = gensim.utils.simple_preprocess(df.context, min_len=1,max_len=50)
-    except:
+        input_data = df.context.apply(gensim.utils.simple_preprocess, min_len=2, max_len=50)
+    except Exception as e:
         print("`context` field not found in JSON data")
+        print(e)
         sys.exit(1)
     logging.info("Done reading data file!")
 
@@ -31,5 +32,5 @@ if __name__ == '__main__':
         workers=10)
 
     model.build_vocab(input_data, progress_per=1000)
-    model.train(input_data, total_examples=len(input_data), epochs=10)
+    model.train(input_data, total_examples=len(input_data), epochs=model.epochs)
     gensim.models.fasttext.save_facebook_model(model, "fast-fb-model.bin")
