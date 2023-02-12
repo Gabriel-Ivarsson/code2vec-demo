@@ -26,7 +26,7 @@ if __name__ == '__main__':
     model = gensim.models.fasttext.FastText(
         sg=1, # use skip-gram
         vector_size=25,
-        window=2,
+        window=5,
         min_count=1,
         epochs=10,
         workers=10)

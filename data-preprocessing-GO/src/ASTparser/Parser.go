@@ -56,9 +56,28 @@ func generateContext(model int, node *ast.File) []string {
 	ast.Inspect(node, func(n ast.Node) bool {
 		switch x := n.(type) {
 		case *ast.File:
+			packageName := sanitizeName(x.Name.Name)
+			if strings.HasPrefix(packageName, "test") {
+				// early return, we dont want to add test stuff to context.
+				return false
+			}
 			parentPackage = x
 		case *ast.FuncDecl:
-			context = append(context, fmt.Sprintf("%s%s %s %s", getTypeWord(model, "funcDecl"), getTypeWord(model, "package"), sanitizeName(x.Name.Name), sanitizeName(parentPackage.Name.Name)))
+			funcName := sanitizeName(x.Name.Name)
+			packageName := sanitizeName(parentPackage.Name.Name)
+			if strings.HasPrefix(funcName, "test") {
+				// early return, we dont want to add test stuff to context.
+				return false
+			}
+			context = append(
+				context,
+				fmt.Sprintf("%s%s %s %s",
+					getTypeWord(model, "funcDecl"),
+					getTypeWord(model, "package"),
+					funcName,
+					packageName,
+				),
+			)
 		}
 		return true
 	})
@@ -104,6 +123,7 @@ func write2DataFile(json []string, fileName string) error {
 	return nil
 }
 
+// ParseDir function
 func ParseDir(model int, dir string) error {
 	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		node, err := getGoFileNode(path)
